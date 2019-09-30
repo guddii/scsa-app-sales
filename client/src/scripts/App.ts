@@ -1,5 +1,5 @@
-import { MessageEndpoint } from "scsa-lib-messaging/src/endpoints/MessageEndpoint";
-import { Message } from "scsa-lib-messaging/src/constructors/Message";
+import { MessageEndpoint } from "@scsa/messaging/src/endpoints/MessageEndpoint";
+import { Message } from "@scsa/messaging/src/constructors/Message";
 
 export class App extends MessageEndpoint {
     subscribe(event: MessageEvent) {
