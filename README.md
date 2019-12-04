@@ -1,2 +1,2 @@
-# scsa-app-account
-Self-Contained System for Accounts Management
+# scsa-app-catalogue
+Self-Contained System for Catalogue
