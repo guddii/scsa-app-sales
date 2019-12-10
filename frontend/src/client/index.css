@@ -1,1 +1,53 @@
-@import "../../node_modules/@scsa/styling/src/client/styles/index.css";
+@import "~@scsa/styling/src/client/styles/index.css";
+
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.Search {
+    border: 2px solid hsla(0, 0%, 100%, 0.5);
+    background-color: hsla(0, 0%, 100%, 0.1);
+    box-shadow: 0 0 1em 0 rgba(0, 0, 0, 0.2);
+}
+
+.Search__label {
+    display: block;
+    border-bottom: 2px solid hsla(0, 0%, 100%, 0.5);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    padding: 0.2rem;
+    color: #253e4d;
+}
+
+.Search__button,
+.Search__input {
+    font-size: 1rem;
+    border: transparent;
+    background: transparent;
+    height: 32px;
+}
+
+.Search__input {
+    padding: 0.5rem;
+    color: hsla(0, 0%, 100%, 0.5);
+    margin: 2px;
+    border-radius: 2px;
+    -webkit-appearance: textfield;
+    outline: none;
+}
+
+.Search__input:hover,
+.Search__input:focus {
+    color: hsla(0, 0%, 100%, 1);
+    background-color: hsla(0, 0%, 100%, 0.1);
+}
+
+.Search__button {
+    background: white;
+    margin: 2px;
+    border-radius: 2px;
+    color: #248fcb;
+}
