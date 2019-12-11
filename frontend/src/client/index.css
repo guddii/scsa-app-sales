@@ -28,6 +28,7 @@
     border: transparent;
     background: transparent;
     height: 32px;
+    width: 32px;
 }
 
 .Search__input {
@@ -37,6 +38,7 @@
     border-radius: 2px;
     -webkit-appearance: textfield;
     outline: none;
+    width: 180px;
 }
 
 .Search__input:hover,

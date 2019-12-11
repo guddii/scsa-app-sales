@@ -1,16 +1,17 @@
 import {
     EventDrivenConsumer,
     IEventDrivenConsumer,
-    LoggerSingleton,
+    Logger,
     Message
 } from "@scsa/messaging";
 import { cfg } from "../../config";
 import tpl from "../../server/views/partials/entry.pug";
+import "../../client/index.css";
 
 const eventDrivenConsumer = new EventDrivenConsumer(cfg);
 
 class SalesSearch extends HTMLElement implements IEventDrivenConsumer {
-    private logger: LoggerSingleton;
+    private logger: Logger;
     input: string;
 
     constructor() {
@@ -24,7 +25,7 @@ class SalesSearch extends HTMLElement implements IEventDrivenConsumer {
         const button = this.shadowRoot.querySelector("button");
         button.addEventListener("click", this.handleClick.bind(this));
 
-        this.logger = LoggerSingleton.getInstance(this.shadowRoot);
+        this.logger = new Logger({ctx: this.shadowRoot});
         eventDrivenConsumer.subscribe(this);
     }
 
