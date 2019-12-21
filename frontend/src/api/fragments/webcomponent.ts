@@ -1,18 +1,18 @@
 import {
-    EventDrivenConsumer,
+    EventDrivenConsumerMS,
     IEventDrivenConsumer,
     Logger,
     Message
 } from "@scsa/messaging";
+import "../../client/index.css";
 import { cfg } from "../../config";
 import tpl from "../../server/views/partials/entry.pug";
-import "../../client/index.css";
 
-const eventDrivenConsumer = new EventDrivenConsumer(cfg);
+const eventDrivenConsumer = new EventDrivenConsumerMS(cfg);
 
 class SalesSearch extends HTMLElement implements IEventDrivenConsumer {
+    public input: string;
     private logger: Logger;
-    input: string;
 
     constructor() {
         super();
@@ -25,31 +25,31 @@ class SalesSearch extends HTMLElement implements IEventDrivenConsumer {
         const button = this.shadowRoot.querySelector("button");
         button.addEventListener("click", this.handleClick.bind(this));
 
-        this.logger = new Logger({ctx: this.shadowRoot});
+        this.logger = new Logger({ ctx: this.shadowRoot });
         eventDrivenConsumer.subscribe(this);
     }
 
-    render() {
+    public render() {
         const template = document.createElement("template");
         template.innerHTML += tpl();
         template.innerHTML += `<link type="text/css" rel="stylesheet" href="${cfg
-            .CURRENT.options.url + "assets/client.css"}">`;
+            .CURRENT.options.url + "api/fragments/webcomponent.css"}">`;
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
-    handleInput(event) {
+    public handleInput(event) {
         this.input = event.target.value;
         eventDrivenConsumer.publish(new Message({ search: this.input }));
     }
 
-    handleClick() {
+    public handleClick() {
         eventDrivenConsumer.publish(new Message({ search: this.input }));
     }
 
-    callback(data) {
+    public callback(data) {
         this.logger.write(data);
     }
 }
 
-window.customElements.define("sales-search", SalesSearch);
+globalThis.customElements.define("sales-search", SalesSearch);

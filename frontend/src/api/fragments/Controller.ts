@@ -1,46 +1,53 @@
 import {
-  EventDrivenConsumer,
-  IEventDrivenConsumer,
-  Logger,
-  Message
+    EventDrivenConsumerGT,
+    IEventDrivenConsumer,
+    Logger,
+    Message
 } from "@scsa/messaging";
-import { cfg } from "../../config";
 import "../../client/index.css";
+import { cfg } from "../../config";
 
-const eventDrivenConsumer = new EventDrivenConsumer(cfg);
-
-interface IframeOptions {
-  ctx?: Element | Document;
+interface IIframeOptions {
+    ctx?: Element | Document;
+    edc?: any;
 }
 
 export class Controller implements IEventDrivenConsumer {
-  private logger: Logger;
-  input: string;
+    public button = document.querySelector("button");
+    public input: string;
+    private logger: Logger;
+    private options: IIframeOptions;
 
-  constructor(options: IframeOptions = { ctx: document }) {
-    eventDrivenConsumer.subscribe(this);
+    constructor(
+        options: IIframeOptions = {
+            ctx: document,
+            edc: new EventDrivenConsumerGT(cfg)
+        }
+    ) {
+        this.options = options;
+        this.options.edc.subscribe(this);
 
-    const input = options.ctx.querySelector("input");
-    input.addEventListener("input", this.handleInput.bind(this));
+        const input = options.ctx.querySelector("input");
+        input.addEventListener("input", this.handleInput.bind(this));
 
-    const button = options.ctx.querySelector("button");
-    button.addEventListener("click", this.handleClick.bind(this));
+        const button = options.ctx.querySelector("button");
+        button.addEventListener("click", this.handleClick.bind(this));
 
-    this.logger = new Logger({
-      ctx: options.ctx
-    });
-  }
+        this.logger = new Logger({
+            ctx: options.ctx
+        });
+    }
 
-  handleInput(event) {
-    this.input = event.target.value;
-    eventDrivenConsumer.publish(new Message({ search: this.input }));
-  }
+    public handleInput = event => {
+        this.input = event.target.value;
+        this.options.edc.publish(new Message({ search: this.input }));
+    };
 
-  handleClick() {
-    eventDrivenConsumer.publish(new Message({ search: this.input }));
-  }
+    public handleClick = () => {
+        this.options.edc.publish(new Message({ search: this.input }));
+    };
 
-  callback(data) {
-    this.logger.write(data);
-  }
+    public callback(data) {
+        this.logger.write(data);
+    }
 }
