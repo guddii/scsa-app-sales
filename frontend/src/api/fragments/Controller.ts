@@ -17,6 +17,9 @@ export class Controller implements IEventDrivenConsumer {
     public input: string;
     private logger: Logger;
     private options: IIframeOptions;
+    private datalist: HTMLDataListElement;
+
+
 
     constructor(
         options: IIframeOptions = {
@@ -33,6 +36,10 @@ export class Controller implements IEventDrivenConsumer {
         const button = options.ctx.querySelector("button");
         button.addEventListener("click", this.handleClick.bind(this));
 
+        this.datalist = options.ctx.querySelector(
+          '[data-selector="results"]'
+        );
+
         this.logger = new Logger({
             ctx: options.ctx
         });
@@ -47,7 +54,19 @@ export class Controller implements IEventDrivenConsumer {
         this.options.edc.publish(new Message({ search: this.input }));
     };
 
+    public handleFindings(data) {
+        this.datalist.innerText = "";
+        if (data.payload.found) {
+            data.payload.found.products.forEach(element => {
+                const opt = document.createElement("option");
+                opt.value = element;
+                this.datalist.append(opt);
+            });
+        }
+    }
+
     public callback(data) {
         this.logger.write(data);
+        this.handleFindings(data);
     }
 }

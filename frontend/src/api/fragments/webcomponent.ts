@@ -13,6 +13,7 @@ const eventDrivenConsumer = new EventDrivenConsumerMS(cfg);
 class SalesSearch extends HTMLElement implements IEventDrivenConsumer {
     public input: string;
     private logger: Logger;
+    private datalist: HTMLDataListElement;
 
     constructor() {
         super();
@@ -24,6 +25,10 @@ class SalesSearch extends HTMLElement implements IEventDrivenConsumer {
 
         const button = this.shadowRoot.querySelector("button");
         button.addEventListener("click", this.handleClick.bind(this));
+
+        this.datalist = this.shadowRoot.querySelector(
+            '[data-selector="results"]'
+        );
 
         this.logger = new Logger({ ctx: this.shadowRoot });
         eventDrivenConsumer.subscribe(this);
@@ -47,8 +52,20 @@ class SalesSearch extends HTMLElement implements IEventDrivenConsumer {
         eventDrivenConsumer.publish(new Message({ search: this.input }));
     }
 
+    public handleFindings(data) {
+        this.datalist.innerText = "";
+        if (data.payload.found) {
+            data.payload.found.products.forEach(element => {
+                const opt = document.createElement("option");
+                opt.value = element;
+                this.datalist.append(opt);
+            });
+        }
+    }
+
     public callback(data) {
         this.logger.write(data);
+        this.handleFindings(data);
     }
 }
 

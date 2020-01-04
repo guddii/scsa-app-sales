@@ -2,7 +2,8 @@
     .Search
         label.Search__body
             .Search__label Search
-            input.Search__input(type="search" name="q")
+            input.Search__input(type="search" name="q" list="results")
+            datalist(id="results" data-selector="results")
             button.Search__button
                 span(hidden) Search
                 .fa.fa-search
